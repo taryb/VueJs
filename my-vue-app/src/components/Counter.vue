@@ -7,6 +7,7 @@
 
 <script setup>
 import { ref } from 'vue';
+import { defineEmits, defineProps } from 'vue';
 
 const props = defineProps({
     intialCount: {
@@ -15,10 +16,12 @@ const props = defineProps({
     },
 })
 
-const count = ref(props.intialCount)
+const emit = defineEmits(['update']);
+const count = ref(props.intialCount);
 
 function increment() {
     count.value++;
+    emit('update', count.value);
 }
 </script>
 
