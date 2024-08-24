@@ -1,7 +1,9 @@
 <template>
     <div id = "app">
-      <h1>Welcome to My vue app</h1>
-      <Counter />
+      <h1>Multiple Counters</h1>
+      <Counter :intialCount = "5"/>
+      <Counter :intialCount = "10"/>
+      <Counter :intialCount = "15"/>
     </div>
 </template>
 

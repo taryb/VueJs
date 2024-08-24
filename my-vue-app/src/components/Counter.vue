@@ -8,11 +8,18 @@
 <script setup>
 import { ref } from 'vue';
 
-const count = ref(0);
-function increment(){
+const props = defineProps({
+    intialCount: {
+        type: Number,
+        default: 0,
+    },
+})
+
+const count = ref(props.intialCount)
+
+function increment() {
     count.value++;
 }
-
 </script>
 
 <style scoped>
@@ -23,6 +30,6 @@ button {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    
+
 }
 </style>
