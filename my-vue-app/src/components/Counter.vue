@@ -1,29 +1,18 @@
 <template>
     <div>
-        <h2>Counter: {{ count }}</h2>
-        <button @click="increment">Increment</button>
+      <h2>Global Counter: {{ counterStore.count }}</h2>
+      <button @click="counterStore.increment">Increment</button>
+      <button @click="counterStore.reset">Reset</button>
     </div>
-</template>
-
-<script setup>
-import { ref } from 'vue';
-import { defineEmits, defineProps } from 'vue';
-
-const props = defineProps({
-    intialCount: {
-        type: Number,
-        default: 0,
-    },
-})
-
-const emit = defineEmits(['update']);
-const count = ref(props.intialCount);
-
-function increment() {
-    count.value++;
-    emit('update', count.value);
-}
-</script>
+  </template>
+  
+  <script setup>
+  import { useCounterStore } from '../stores/counterStore';
+  
+  // Access the counter store
+  const counterStore = useCounterStore();
+  </script>
+  
 
 <style scoped>
 button {
