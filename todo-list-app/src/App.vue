@@ -7,8 +7,9 @@
 </template>
 
 <script setup>
-import ToDoInput from './components/ToDoInput.vue';
-import ToDoList from './components/ToDoList.vue';
+import ToDoInput from '@/components/ToDoInput.vue';
+import ToDoList from '@/components/ToDoList.vue';
+
 </script>
 
 <style scoped>

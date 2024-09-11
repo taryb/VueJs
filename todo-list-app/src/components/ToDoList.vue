@@ -11,8 +11,9 @@
   </template>
   
   <script setup lang="ts">
-  import { useToDoStore } from '../stores/useToDoStore'; // Importing the to-do store
-  import ToDoItem from './ToDoItem.vue'; // Importing the ToDoItem component
+import { useToDoStore } from '@/stores/useToDoStore'; // Using '@' alias
+import ToDoItem from '@/components/ToDoItem.vue'; 
+
   
   const todoStore = useToDoStore(); // Accessing the to-do store
   </script>

@@ -7,7 +7,7 @@
   
   <script setup lang="ts">
   import { ref } from 'vue';
-  import { useToDoStore } from '../stores/useToDoStore';
+  import { useToDoStore } from '@/stores/useToDoStore';
   
   const newTask = ref('');
   const todoStore = useToDoStore();

@@ -8,7 +8,7 @@
   
   <script setup lang="ts">
   import { defineProps, defineEmits } from 'vue';
-  import { ToDo } from '../stores/useToDoStore';
+  import { ToDo } from '@/stores/useToDoStore';
   
   const props = defineProps<{ todo: ToDo }>();
   const emits = defineEmits(['toggle', 'remove']);
