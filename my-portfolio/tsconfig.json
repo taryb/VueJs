@@ -1,7 +1,20 @@
 {
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ]
+  "compilerOptions": {
+    "target": "ESNext", // Specify the target JavaScript version
+    "useDefineForClassFields": true, // Use class fields with the "define" behavior
+    "module": "ESNext", // Set the module system to ESNext
+    "moduleResolution": "Node", // Use Node-style module resolution
+    "strict": true, // Enable all strict type-checking options
+    "jsx": "preserve", // Keep JSX as-is for Vue compatibility
+    "esModuleInterop": true, // Enables interop between CommonJS and ESModules
+    "skipLibCheck": true, // Skip type checks on all declaration files (.d.ts)
+    "forceConsistentCasingInFileNames": true, // Enforce consistent casing in import paths
+    "baseUrl": "./", // Set the base directory for resolving non-relative module names
+    "types": ["vite/client", "node"], // Include Vite client types and Node.js types
+    "paths": {
+      "@/*": ["src/*"] // Set up the '@' alias to point to the 'src' directory
+    }
+  },
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"], // Include TypeScript and Vue files in the project
+  "exclude": ["node_modules"] // Exclude 'node_modules' from the compilation
 }

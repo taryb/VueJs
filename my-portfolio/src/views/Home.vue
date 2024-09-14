@@ -4,7 +4,7 @@
       <!-- Hero Section -->
       <section class="hero bg-gradient-to-r from-blue-500 to-purple-600 text-white py-16 px-4 text-center">
         <h1 class="text-5xl font-extrabold mb-4">Welcome to My Portfolio</h1>
-        <p class="text-xl mb-6">Hi, I'm [Your Name], a passionate Frontend Developer.</p>
+        <p class="text-xl mb-6">Hi, I'm Tary, a passionate Frontend Developer.</p>
         <div class="flex justify-center space-x-4">
           <a
             href="#projects"
