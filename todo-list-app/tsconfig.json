@@ -1,24 +1,16 @@
 {
   "compilerOptions": {
-    "target": "ESNext",                        // Target latest JavaScript version
-    "module": "ESNext",                        // Use ESNext module resolution
-    "moduleResolution": "Node",                // Use Node module resolution
-    "lib": ["DOM", "ESNext"],                  // Include DOM and ESNext libraries
-    "strict": true,                            // Enable all strict type-checking options
-    "jsx": "preserve",                         // Preserve JSX for Vue components
-    "esModuleInterop": true,                   // Enable compatibility for CommonJS modules
-    "skipLibCheck": true,                      // Skip type checking of declaration files
-    "forceConsistentCasingInFileNames": true,  // Ensure file names are consistent
-    "baseUrl": ".",                            // Base URL for resolving non-relative module names
-    "paths": {                                 // Path mapping
-      "@/*": ["src/*"]
-    },
-    "types": ["vite/client"]                   // Include Vite client types
+    "target": "ESNext",
+    "useDefineForClassFields": true,
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "strict": true,
+    "jsx": "preserve",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": "./",
+    "types": ["vite/client"]
   },
-  "include": [
-    "src/**/*.ts", 
-    "src/**/*.d.ts", 
-    "src/**/*.vue"                            // Include all TypeScript and Vue files
-  ],
-  "exclude": ["node_modules"]
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"]
 }
