@@ -1,8 +1,8 @@
 // tailwind.config.js
-module.exports = {
+export default {
   content: [
     './index.html',
-    './src/**/*.{vue,js,ts,jsx,tsx}', // Include all your Vue files and components
+    './src/**/*.{vue,js,ts,jsx,tsx}', // Ensure this includes all your Vue and JS files
   ],
   theme: {
     extend: {},
