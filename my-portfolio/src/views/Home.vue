@@ -1,8 +1,8 @@
 <!-- src/views/Home.vue -->
 <template>
-    <div class="home">
-      <h1>Welcome to My Portfolio</h1>
-      <p>Hi, I'm [Your Name], a Frontend Developer.</p>
+    <div class="home p-4">
+      <h1 class="text-3xl font-bold text-center">Welcome to My Portfolio</h1>
+      <p class="text-lg text-gray-700 mt-4">Hi, I'm [Your Name], a Frontend Developer.</p>
     </div>
   </template>
   
