@@ -1,67 +1,87 @@
 // src/store/mainStore.ts
-import { defineStore } from 'pinia';
 
-// Define the type for a project
+import { defineStore } from 'pinia';
+import { ref } from 'vue';
+import { db } from '@/firebaseConfig'; // Import Firestore database
+import {
+  collection,
+  getDocs,
+  addDoc,
+  deleteDoc,
+  doc,
+  QueryDocumentSnapshot,
+  DocumentData,
+} from 'firebase/firestore'; // Import Firestore functions and types
+
+// Define the Project interface to represent the structure of a project document in Firestore
 interface Project {
-  id: number;
-  title: string;
-  description: string;
-  image: string; // Add image property to the Project interface
+  id: string; // Firestore document ID
+  title: string; // Title of the project
+  description: string; // Description of the project
+  image?: string; // Optional: URL of the project's image
 }
 
-// Define your store
-export const useMainStore = defineStore('main', {
-  state: () => ({
-    userName: 'Tary Bounavong',
-    projects: [
-      {
-        id: 1,
-        title: 'Project 1',
-        description: 'A description of project 1.',
-        image: new URL('@/assets/project.jpg', import.meta.url).href, // Local image example
-      },
-      {
-        id: 2,
-        title: 'Project 2',
-        description: 'A description of project 2.',
-        image: new URL('@/assets/project.jpg', import.meta.url).href, // Local image example
-      },
-      {
-        id: 3,
-        title: 'Project 3',
-        description: 'A description of project 3.',
-        image: new URL('@/assets/project.jpg', import.meta.url).href, // Local image example
-      },
-    ] as Project[], // Type the projects state
-  }),
+// Define the Pinia store
+export const useMainStore = defineStore('main', () => {
+  // State
+  const projects = ref<Project[]>([]); // Array of projects
+  const userName = ref('John Doe'); // Example user name
+  const projectCount = ref(0); // Number of projects
 
-  getters: {
-    // Get the total number of projects
-    projectCount: (state) => state.projects.length,
+  // Fetch projects from Firestore
+  const fetchProjects = async () => {
+    try {
+      console.log('Fetching projects from Firestore...'); // Debugging log
+      const projectsRef = collection(db, 'projects');
+      const querySnapshot = await getDocs(projectsRef);
+  
+      projects.value = []; // Clear the local projects array
+  
+      querySnapshot.forEach((doc: QueryDocumentSnapshot<DocumentData>) => {
+        projects.value.push({ id: doc.id, ...doc.data() } as Project);
+      });
+  
+      projectCount.value = projects.value.length; // Update the project count
+      console.log('Projects fetched:', projects.value); // Debugging log
+    } catch (error) {
+      console.error('Error fetching projects:', error); // Log any errors
+    }
+  };
+  
 
-    // Get a project by its ID
-    getProjectById: (state) => (id: number) => {
-      return state.projects.find((project) => project.id === id);
-    },
-  },
+  // Add a new project to Firestore
+  const addProject = async (newProject: Omit<Project, 'id'>) => {
+    try {
+      const projectsRef = collection(db, 'projects'); // Reference to the 'projects' collection
+      const docRef = await addDoc(projectsRef, newProject); // Add new document to Firestore
+      projects.value.push({ id: docRef.id, ...newProject }); // Add new project to local state
+      projectCount.value = projects.value.length; // Update the project count
+    } catch (error) {
+      console.error('Error adding project:', error); // Log any errors
+    }
+  };
 
-  actions: {
-    // Action to add a new project
-    addProject(newProject: Project) {
-      this.projects.push(newProject);
-    },
+  // Remove a project from Firestore
+  const removeProject = async (id: string) => {
+    try {
+      await deleteDoc(doc(db, 'projects', id)); // Delete document from Firestore
+      projects.value = projects.value.filter((project) => project.id !== id); // Remove project from local state
+      projectCount.value = projects.value.length; // Update the project count
+    } catch (error) {
+      console.error('Error removing project:', error); // Log any errors
+    }
+  };
 
-    // Action to remove a project by its ID
-    removeProject(id: number) {
-      this.projects = this.projects.filter((project) => project.id !== id);
-    },
+  // Fetch projects on store initialization
+  fetchProjects();
 
-    // Action to update a project
-    updateProject(updatedProject: Project) {
-      const index = this.projects.findIndex((project) => project.id === updatedProject.id);
-      if (index !== -1) {
-        this.projects[index] = updatedProject;
-      }
-    },
-  },
+  // Return the state and actions for use in components
+  return {
+    userName,
+    projects,
+    projectCount,
+    fetchProjects,
+    addProject,
+    removeProject,
+  };
 });
