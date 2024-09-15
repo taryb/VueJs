@@ -12,7 +12,10 @@ jobs:
 
     steps:
       # Check out the repository code
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Ensures that the full history is checked out
 
       # Set up Node.js environment
       - name: Set up Node.js
@@ -25,6 +28,7 @@ jobs:
         run: |
           npm install
           npm run build
+        working-directory: ./my-portfolio # Adjust the path if needed
 
       # Deploy to Firebase Hosting
       - name: Deploy to Firebase
