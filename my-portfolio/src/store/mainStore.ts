@@ -12,7 +12,7 @@ interface Project {
 // Define your store
 export const useMainStore = defineStore('main', {
   state: () => ({
-    userName: '[Your Name]',
+    userName: 'Tary Bounavong',
     projects: [
       {
         id: 1,
