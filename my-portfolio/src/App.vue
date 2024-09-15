@@ -49,6 +49,14 @@
             <li>
               <router-link to="/contact" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-blue-700">Contact</router-link>
             </li>
+            <li>
+              <router-link to="/login" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-blue-700">Login</router-link> 
+            </li>
+            <div>
+
+    
+
+  </div>
           </ul>
         </div>
       </div>
