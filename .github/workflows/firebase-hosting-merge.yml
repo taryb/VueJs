@@ -26,7 +26,7 @@ jobs:
       # Install dependencies and build the project
       - name: Install dependencies and build
         run: |
-          npm ci
+          npm install
           npm run build
         working-directory: ./my-portfolio # Adjust the path if needed
 
