@@ -21,12 +21,12 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16'  # Ensure this matches the Node.js version you're using locally
+          node-version: '18'  # Use Node.js version 18 or higher
 
       # Install dependencies and build the project
       - name: Install dependencies and build
         run: |
-          npm install
+          npm ci
           npm run build
         working-directory: ./my-portfolio # Adjust the path if needed
 
@@ -38,4 +38,3 @@ jobs:
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_MY_PORTFOLIO_72048 }}
           channelId: live
           projectId: my-portfolio-72048
-          entryPoint: my-portfolio # Specify the directory containing firebase.json
