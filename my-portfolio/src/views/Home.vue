@@ -32,7 +32,7 @@
           <div
             v-for="project in store.projects"
             :key="project.id"
-            @click="goToProjectDetail(project.id)" 
+            @click="goToProjectDetail(project.id)"
             class="project-card bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300 cursor-pointer"
           >
             <!-- Display Multiple Images per Project -->
@@ -47,6 +47,14 @@
             </div>
             <h3 class="text-2xl font-semibold mb-2">{{ project.title }}</h3>
             <p class="text-gray-600 mb-4">{{ project.description }}</p>
+            
+            <!-- Remove Project Button -->
+            <button 
+              v-if="isAuthenticated" 
+              @click.stop="handleRemoveProject(project.id)" 
+              class="text-red-600 hover:underline font-semibold mt-2">
+              Remove
+            </button>
           </div>
         </div>
       </div>
@@ -140,6 +148,15 @@ export default defineComponent({
       }
     };
 
+    // Function to remove a project
+    const handleRemoveProject = async (id: string) => {
+      try {
+        await store.removeProject(id); // Call the store's removeProject method
+      } catch (error) {
+        console.error('Error removing project:', error);
+      }
+    };
+
     // Function to navigate to project detail
     const goToProjectDetail = (id: string) => {
       router.push({ name: 'ProjectDetail', params: { id } });
@@ -162,6 +179,7 @@ export default defineComponent({
       newProjectLongDescription, // Return the new state
       newProjectImages,
       handleAddProject,
+      handleRemoveProject, // Expose remove project function
       handleLogout,
       handleFileChange,
       goToProjectDetail, // Return the navigation function
