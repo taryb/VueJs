@@ -32,27 +32,27 @@
           <div
             v-for="project in store.projects"
             :key="project.id"
-            @click="goToProjectDetail(project.id)"
-            class="project-card bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300 cursor-pointer"
+            class="project-card bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300 relative"
           >
-            <!-- Display Multiple Images per Project -->
-            <div v-if="project.images && project.images.length > 0">
+            <!-- Clickable area for project details -->
+            <div @click="goToProjectDetail(project.id)" class="cursor-pointer">
+              <!-- Display Only One Image per Project -->
               <img
-                v-for="(image, index) in project.images"
-                :key="index"
-                :src="image"
+                v-if="project.images && project.images.length > 0"
+                :src="project.images[0]"
                 alt="Project Image"
                 class="w-full h-48 object-cover mb-4"
               />
+              <h3 class="text-2xl font-semibold mb-2">{{ project.title }}</h3>
+              <p class="text-gray-600 mb-4">{{ project.description }}</p>
             </div>
-            <h3 class="text-2xl font-semibold mb-2">{{ project.title }}</h3>
-            <p class="text-gray-600 mb-4">{{ project.description }}</p>
-            
-            <!-- Remove Project Button -->
+
+            <!-- Remove Project Button (Separate Clickable Area) -->
             <button 
               v-if="isAuthenticated" 
               @click.stop="handleRemoveProject(project.id)" 
-              class="text-red-600 hover:underline font-semibold mt-2">
+              class="text-red-600 hover:underline font-semibold absolute top-2 right-2"
+            >
               Remove
             </button>
           </div>
@@ -191,4 +191,12 @@ export default defineComponent({
 
 <style scoped>
 /* Additional styles can go here */
+.project-card {
+  position: relative;
+}
+.remove-button {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+}
 </style>
