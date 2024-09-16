@@ -24,7 +24,7 @@ interface Project {
 export const useMainStore = defineStore('main', () => {
   // State
   const projects = ref<Project[]>([]); // Array of projects
-  const userName = ref('Tary Bounavong'); // Example user name
+  const userName = ref('Tary Bounavongv2'); // Example user name
   const projectCount = ref(0); // Number of projects
 
   // Fetch projects from Firestore
