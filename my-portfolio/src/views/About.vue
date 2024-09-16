@@ -4,10 +4,10 @@
       <div class="max-w-4xl mx-auto text-center">
         <h1 class="text-4xl font-bold text-gray-800 mb-4">About Me</h1>
         <p class="text-lg text-gray-700 mb-6">
-          Hi, I'm [Your Name], a frontend developer with a passion for creating
+          Hi, I'm Tary Bounavong, a frontend developer with a passion for creating
           stunning and responsive web applications. I specialize in Vue.js,
           TypeScript, and Tailwind CSS, and I love to explore new technologies and
-          frameworks.
+          frameworks. This page is still under construction
         </p>
         <div class="mt-8 flex flex-col md:flex-row justify-center gap-8">
           <!-- Skill Card 1 -->

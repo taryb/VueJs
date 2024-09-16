@@ -32,14 +32,21 @@
           <div
             v-for="project in store.projects"
             :key="project.id"
-            class="project-card bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300"
+            @click="goToProjectDetail(project.id)" 
+            class="project-card bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300 cursor-pointer"
           >
-            <img v-for="(image, index) in project.images" :key="index" :src="image" alt="Project Image" class="w-full h-48 object-cover mb-4" />
+            <!-- Display Multiple Images per Project -->
+            <div v-if="project.images && project.images.length > 0">
+              <img
+                v-for="(image, index) in project.images"
+                :key="index"
+                :src="image"
+                alt="Project Image"
+                class="w-full h-48 object-cover mb-4"
+              />
+            </div>
             <h3 class="text-2xl font-semibold mb-2">{{ project.title }}</h3>
             <p class="text-gray-600 mb-4">{{ project.description }}</p>
-            <button v-if="isAuthenticated" @click="store.removeProject(project.id)" class="text-red-600 hover:underline font-semibold">
-              Remove
-            </button>
           </div>
         </div>
       </div>
@@ -52,8 +59,7 @@
         <form @submit.prevent="handleAddProject" class="space-y-4">
           <input v-model="newProjectTitle" placeholder="Project Title" class="w-full p-2 border border-gray-300 rounded" />
           <textarea v-model="newProjectDescription" placeholder="Project Description" class="w-full p-2 border border-gray-300 rounded"></textarea>
-          
-          <!-- File Input for Mobile-Friendly Image Upload -->
+          <textarea v-model="newProjectLongDescription" placeholder="Project Longer Description" class="w-full p-2 border border-gray-300 rounded"></textarea>
           <input type="file" @change="handleFileChange" accept="image/*" multiple class="w-full p-2 border border-gray-300 rounded" />
           
           <button type="submit" class="bg-blue-600 text-white py-2 px-6 rounded-full shadow-md hover:bg-blue-700 transition duration-300">
@@ -71,15 +77,18 @@ import { useMainStore } from '@/store/mainStore';
 import { checkUserAuth, signOutUser } from '@/services/auth';
 import { storage } from '@/firebaseConfig';
 import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { useRouter } from 'vue-router'; // Import router
 
 export default defineComponent({
   name: 'Home',
   setup() {
     const store = useMainStore();
+    const router = useRouter(); // Initialize router
     
     // Local state for the form
     const newProjectTitle = ref('');
     const newProjectDescription = ref('');
+    const newProjectLongDescription = ref(''); // New state for longer description
     const newProjectImages = ref<File[]>([]); // Array of files for multiple images
     const isAuthenticated = ref(false); // State to track if the user is authenticated
 
@@ -99,11 +108,15 @@ export default defineComponent({
         store.addProject({
           title: newProjectTitle.value,
           description: newProjectDescription.value,
+          longDescription: newProjectLongDescription.value, // Include longer description
+          date: new Date().toISOString(), // Add a date in ISO format
           images: imageUrls, // Array of image URLs
         });
+        
         // Clear input fields after adding
         newProjectTitle.value = '';
         newProjectDescription.value = '';
+        newProjectLongDescription.value = ''; // Clear the longer description input
         newProjectImages.value = [];
       }
     };
@@ -127,6 +140,11 @@ export default defineComponent({
       }
     };
 
+    // Function to navigate to project detail
+    const goToProjectDetail = (id: string) => {
+      router.push({ name: 'ProjectDetail', params: { id } });
+    };
+
     // Check if the user is authenticated
     onMounted(() => {
       checkUserAuth((user) => {
@@ -141,10 +159,12 @@ export default defineComponent({
       store,
       newProjectTitle,
       newProjectDescription,
+      newProjectLongDescription, // Return the new state
       newProjectImages,
       handleAddProject,
       handleLogout,
       handleFileChange,
+      goToProjectDetail, // Return the navigation function
       isAuthenticated,
     };
   },

@@ -1,7 +1,6 @@
 <!-- src/views/Projects.vue -->
 <template>
   <div class="projects bg-gray-50 min-h-screen py-10">
-    <!-- Projects Section -->
     <section class="py-16 px-4 bg-white">
       <div class="max-w-6xl mx-auto">
         <h2 class="text-4xl font-bold text-center text-gray-800 mb-10">Projects</h2>
@@ -16,7 +15,8 @@
           <div
             v-for="project in store.projects"
             :key="project.id"
-            class="project-card bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300"
+            @click="goToProjectDetail(project.id)"
+            class="project-card bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300 cursor-pointer"
           >
             <!-- Display Multiple Images per Project -->
             <div v-if="project.images && project.images.length > 0">
@@ -40,19 +40,27 @@
 <script lang="ts">
 import { defineComponent, onMounted } from 'vue';
 import { useMainStore } from '@/store/mainStore';
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
   name: 'Projects',
   setup() {
     const store = useMainStore();
+    const router = useRouter();
 
     // Fetch projects on component mount
     onMounted(() => {
       store.fetchProjects();
     });
 
+    // Function to navigate to project detail
+    const goToProjectDetail = (id: string) => {
+      router.push({ name: 'ProjectDetail', params: { id } });
+    };
+
     return {
       store,
+      goToProjectDetail,
     };
   },
 });
