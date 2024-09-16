@@ -6,10 +6,16 @@
       <h1 class="text-5xl font-extrabold mb-4">Welcome to My Portfolio</h1>
       <p class="text-xl mb-6">Hi, I'm {{ store.userName }}, a passionate Frontend Developer.</p>
       <div class="flex justify-center space-x-4">
-        <a href="#projects" class="bg-white text-blue-600 font-semibold py-2 px-6 rounded-full shadow-lg hover:bg-gray-100 transition duration-300">
+        <a
+          href="#projects"
+          class="bg-white text-blue-600 font-semibold py-2 px-6 rounded-full shadow-lg hover:bg-gray-100 transition duration-300"
+        >
           View My Work
         </a>
-        <a href="#contact" class="bg-transparent border-2 border-white text-white font-semibold py-2 px-6 rounded-full hover:bg-white hover:text-blue-600 transition duration-300">
+        <a
+          href="#contact"
+          class="bg-transparent border-2 border-white text-white font-semibold py-2 px-6 rounded-full hover:bg-white hover:text-blue-600 transition duration-300"
+        >
           Contact Me
         </a>
       </div>
@@ -94,10 +100,8 @@ export default defineComponent({
       checkUserAuth((user) => {
         if (user) {
           isAuthenticated.value = true; // Set authenticated state to true
-          store.fetchProjects(); // Fetch projects if the user is authenticated
-        } else {
-          store.fetchProjects(); // Fetch projects without authentication
         }
+        store.fetchProjects(); // Fetch projects regardless of authentication
       });
     });
 

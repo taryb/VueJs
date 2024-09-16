@@ -19,7 +19,6 @@ export const checkUserAuth = (callback: (user: User | null) => void) => {
 // Function to handle user login
 export const signInUser = async (email: string, password: string) => {
   try {
-    // Use Firebase Authentication to sign in the user
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     console.log('User signed in successfully:', userCredential.user);
     return userCredential.user;
