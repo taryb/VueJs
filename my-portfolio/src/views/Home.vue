@@ -34,7 +34,7 @@
             :key="project.id"
             class="project-card bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300"
           >
-            <img v-if="project.image" :src="project.image" alt="Project Image" class="w-full h-48 object-cover mb-4" />
+            <img v-for="(image, index) in project.images" :key="index" :src="image" alt="Project Image" class="w-full h-48 object-cover mb-4" />
             <h3 class="text-2xl font-semibold mb-2">{{ project.title }}</h3>
             <p class="text-gray-600 mb-4">{{ project.description }}</p>
             <button v-if="isAuthenticated" @click="store.removeProject(project.id)" class="text-red-600 hover:underline font-semibold">
@@ -52,7 +52,10 @@
         <form @submit.prevent="handleAddProject" class="space-y-4">
           <input v-model="newProjectTitle" placeholder="Project Title" class="w-full p-2 border border-gray-300 rounded" />
           <textarea v-model="newProjectDescription" placeholder="Project Description" class="w-full p-2 border border-gray-300 rounded"></textarea>
-          <input v-model="newProjectImage" placeholder="Project Image URL" class="w-full p-2 border border-gray-300 rounded" />
+          
+          <!-- File Input for Mobile-Friendly Image Upload -->
+          <input type="file" @change="handleFileChange" accept="image/*" multiple class="w-full p-2 border border-gray-300 rounded" />
+          
           <button type="submit" class="bg-blue-600 text-white py-2 px-6 rounded-full shadow-md hover:bg-blue-700 transition duration-300">
             Add Project
           </button>
@@ -65,7 +68,9 @@
 <script lang="ts">
 import { defineComponent, ref, onMounted } from 'vue';
 import { useMainStore } from '@/store/mainStore';
-import { checkUserAuth, signOutUser } from '@/services/auth'; // Import auth functions
+import { checkUserAuth, signOutUser } from '@/services/auth';
+import { storage } from '@/firebaseConfig';
+import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 export default defineComponent({
   name: 'Home',
@@ -75,22 +80,40 @@ export default defineComponent({
     // Local state for the form
     const newProjectTitle = ref('');
     const newProjectDescription = ref('');
-    const newProjectImage = ref('');
+    const newProjectImages = ref<File[]>([]); // Array of files for multiple images
     const isAuthenticated = ref(false); // State to track if the user is authenticated
 
+    // Function to handle file input changes
+    const handleFileChange = (event: Event) => {
+      const target = event.target as HTMLInputElement;
+      if (target.files) {
+        newProjectImages.value = Array.from(target.files); // Convert FileList to Array
+      }
+    };
+
     // Function to handle form submission
-    const handleAddProject = () => {
-      if (newProjectTitle.value && newProjectDescription.value) {
+    const handleAddProject = async () => {
+      if (newProjectTitle.value && newProjectDescription.value && newProjectImages.value.length > 0) {
+        const imageUrls = await Promise.all(newProjectImages.value.map(uploadImageToStorage)); // Upload images and get URLs
+
         store.addProject({
           title: newProjectTitle.value,
           description: newProjectDescription.value,
-          image: newProjectImage.value,
+          images: imageUrls, // Array of image URLs
         });
         // Clear input fields after adding
         newProjectTitle.value = '';
         newProjectDescription.value = '';
-        newProjectImage.value = '';
+        newProjectImages.value = [];
       }
+    };
+
+    // Function to upload an image to Firebase Storage
+    const uploadImageToStorage = async (file: File): Promise<string> => {
+      const storageReference = storageRef(storage, `images/${Date.now()}-${file.name}`); // Unique filename using timestamp
+      await uploadBytes(storageReference, file); // Upload the file
+      const downloadURL = await getDownloadURL(storageReference); // Get the URL of the uploaded file
+      return downloadURL;
     };
 
     // Function to handle user logout
@@ -118,10 +141,11 @@ export default defineComponent({
       store,
       newProjectTitle,
       newProjectDescription,
-      newProjectImage,
+      newProjectImages,
       handleAddProject,
-      handleLogout, // Return the logout handler
-      isAuthenticated, // Return the authenticated state
+      handleLogout,
+      handleFileChange,
+      isAuthenticated,
     };
   },
 });

@@ -1,8 +1,7 @@
 // src/store/mainStore.ts
-
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import { db } from '@/firebaseConfig'; // Import Firestore database
+import { db } from '@/firebaseConfig';
 import {
   collection,
   getDocs,
@@ -11,14 +10,14 @@ import {
   doc,
   QueryDocumentSnapshot,
   DocumentData,
-} from 'firebase/firestore'; // Import Firestore functions and types
+} from 'firebase/firestore';
 
 // Define the Project interface to represent the structure of a project document in Firestore
 interface Project {
   id: string; // Firestore document ID
   title: string; // Title of the project
   description: string; // Description of the project
-  image?: string; // Optional: URL of the project's image
+  images: string[]; // Array of image URLs
 }
 
 // Define the Pinia store
@@ -47,7 +46,6 @@ export const useMainStore = defineStore('main', () => {
       console.error('Error fetching projects:', error); // Log any errors
     }
   };
-  
 
   // Add a new project to Firestore
   const addProject = async (newProject: Omit<Project, 'id'>) => {

@@ -1,43 +1,63 @@
 <!-- src/views/Projects.vue -->
 <template>
-    <div class="projects bg-gray-50 min-h-screen py-10 px-4">
+  <div class="projects bg-gray-50 min-h-screen py-10">
+    <!-- Projects Section -->
+    <section class="py-16 px-4 bg-white">
       <div class="max-w-6xl mx-auto">
-        <h1 class="text-4xl font-bold text-center text-gray-800 mb-10">My Projects</h1>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <!-- Project Card -->
+        <h2 class="text-4xl font-bold text-center text-gray-800 mb-10">Projects</h2>
+        
+        <!-- Show loader while fetching projects -->
+        <div v-if="store.projects.length === 0" class="text-center text-gray-500">
+          Loading projects...
+        </div>
+
+        <!-- Display Projects -->
+        <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <div
             v-for="project in store.projects"
             :key="project.id"
-            class="project-card bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
+            class="project-card bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-300"
           >
-            <!-- Project Image -->
-            <img
-              :src="project.image"
-              :alt="project.title"
-              class="w-full h-48 object-cover"
-            />
-            <!-- Project Content -->
-            <div class="p-6">
-              <h3 class="text-2xl font-semibold mb-2">{{ project.title }}</h3>
-              <p class="text-gray-600 mb-4">{{ project.description }}</p>
-              <a href="#" class="text-blue-600 hover:underline font-semibold">View Details &rarr;</a>
+            <!-- Display Multiple Images per Project -->
+            <div v-if="project.images && project.images.length > 0">
+              <img
+                v-for="(image, index) in project.images"
+                :key="index"
+                :src="image"
+                alt="Project Image"
+                class="w-full h-48 object-cover mb-4"
+              />
             </div>
+            <h3 class="text-2xl font-semibold mb-2">{{ project.title }}</h3>
+            <p class="text-gray-600 mb-4">{{ project.description }}</p>
           </div>
         </div>
       </div>
-    </div>
-  </template>
-  
-  <script lang="ts">
-  import { defineComponent } from 'vue';
-  import { useMainStore } from '@/store/mainStore'; // Import the store
-  
-  export default defineComponent({
-    name: 'Projects',
-    setup() {
-      const store = useMainStore(); // Use the store
-      return { store };
-    },
-  });
-  </script>
-  
+    </section>
+  </div>
+</template>
+
+<script lang="ts">
+import { defineComponent, onMounted } from 'vue';
+import { useMainStore } from '@/store/mainStore';
+
+export default defineComponent({
+  name: 'Projects',
+  setup() {
+    const store = useMainStore();
+
+    // Fetch projects on component mount
+    onMounted(() => {
+      store.fetchProjects();
+    });
+
+    return {
+      store,
+    };
+  },
+});
+</script>
+
+<style scoped>
+/* Add custom styles for the projects page */
+</style>
