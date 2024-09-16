@@ -6,18 +6,16 @@
       <h1 class="text-5xl font-extrabold mb-4">Welcome to My Portfolio</h1>
       <p class="text-xl mb-6">Hi, I'm {{ store.userName }}, a passionate Frontend Developer.</p>
       <div class="flex justify-center space-x-4">
-        <a
-          href="#projects"
-          class="bg-white text-blue-600 font-semibold py-2 px-6 rounded-full shadow-lg hover:bg-gray-100 transition duration-300"
-        >
+        <a href="#projects" class="bg-white text-blue-600 font-semibold py-2 px-6 rounded-full shadow-lg hover:bg-gray-100 transition duration-300">
           View My Work
         </a>
-        <a
-          href="#contact"
-          class="bg-transparent border-2 border-white text-white font-semibold py-2 px-6 rounded-full hover:bg-white hover:text-blue-600 transition duration-300"
-        >
+        <a href="#contact" class="bg-transparent border-2 border-white text-white font-semibold py-2 px-6 rounded-full hover:bg-white hover:text-blue-600 transition duration-300">
           Contact Me
         </a>
+        <!-- Logout Button (Visible to Authenticated Users Only) -->
+        <button v-if="isAuthenticated" @click="handleLogout" class="bg-red-600 text-white font-semibold py-2 px-6 rounded-full shadow-md hover:bg-red-700 transition duration-300">
+          Logout
+        </button>
       </div>
     </section>
 
@@ -67,7 +65,7 @@
 <script lang="ts">
 import { defineComponent, ref, onMounted } from 'vue';
 import { useMainStore } from '@/store/mainStore';
-import { checkUserAuth } from '@/services/auth'; // Import the auth function
+import { checkUserAuth, signOutUser } from '@/services/auth'; // Import auth functions
 
 export default defineComponent({
   name: 'Home',
@@ -95,6 +93,17 @@ export default defineComponent({
       }
     };
 
+    // Function to handle user logout
+    const handleLogout = async () => {
+      try {
+        await signOutUser();
+        isAuthenticated.value = false; // Reset the authentication state
+        window.location.href = '/login'; // Redirect to the login page
+      } catch (error) {
+        console.error('Error logging out:', error);
+      }
+    };
+
     // Check if the user is authenticated
     onMounted(() => {
       checkUserAuth((user) => {
@@ -111,6 +120,7 @@ export default defineComponent({
       newProjectDescription,
       newProjectImage,
       handleAddProject,
+      handleLogout, // Return the logout handler
       isAuthenticated, // Return the authenticated state
     };
   },

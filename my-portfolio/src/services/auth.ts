@@ -1,5 +1,5 @@
 // src/services/auth.ts
-import { getAuth, onAuthStateChanged, User, signInWithEmailAndPassword } from 'firebase/auth';
+import { getAuth, onAuthStateChanged, User, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 
 const auth = getAuth();
 
@@ -24,6 +24,17 @@ export const signInUser = async (email: string, password: string) => {
     return userCredential.user;
   } catch (error) {
     console.error('Error signing in:', error);
+    throw error;
+  }
+};
+
+// Function to handle user logout
+export const signOutUser = async () => {
+  try {
+    await signOut(auth);
+    console.log('User signed out successfully');
+  } catch (error) {
+    console.error('Error signing out:', error);
     throw error;
   }
 };
