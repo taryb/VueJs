@@ -5,13 +5,12 @@ import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage'; // Import Firebase Storage
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAnCyIx4PX6OCE9_yRAOCdwu6FtRRAnROc",
-  authDomain: "my-portfolio-72048.firebaseapp.com",
-  databaseURL: "https://my-portfolio-72048-default-rtdb.firebaseio.com",
-  projectId: "my-portfolio-72048",
-  storageBucket: "my-portfolio-72048.appspot.com",
-  messagingSenderId: "1082976154839",
-  appId: "1:1082976154839:web:dcb26c979618575aeaac92"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
 // Initialize Firebase

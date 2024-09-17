@@ -8,42 +8,39 @@ import {
   addDoc,
   deleteDoc,
   doc,
+  updateDoc,
   QueryDocumentSnapshot,
   DocumentData,
 } from 'firebase/firestore';
 
-// Define the type for a Project
 interface Project {
   id: string;
   title: string;
   description: string;
-  longDescription: string; // Add the longDescription property
-  date: string; // Ensure date is included
+  longDescription: string;
+  date: string;
   images: string[];
 }
 
-// Define the Pinia store
 export const useMainStore = defineStore('main', () => {
   // State
-  const projects = ref<Project[]>([]); // Array of projects
-  const userName = ref('Tary Bounavong'); // Example user name
-  const projectCount = ref(0); // Number of projects
+  const projects = ref<Project[]>([]);
+  const userName = ref('John Doe'); // Add userName to the store
+  const projectCount = ref(0);
 
   // Fetch projects from Firestore
   const fetchProjects = async () => {
     try {
-      console.log('Fetching projects from Firestore...');
       const projectsRef = collection(db, 'projects');
       const querySnapshot = await getDocs(projectsRef);
-  
-      projects.value = []; // Clear the local projects array
-  
+
+      projects.value = [];
+
       querySnapshot.forEach((doc: QueryDocumentSnapshot<DocumentData>) => {
         projects.value.push({ id: doc.id, ...doc.data() } as Project);
       });
-  
-      projectCount.value = projects.value.length; // Update the project count
-      console.log('Projects fetched:', projects.value);
+
+      projectCount.value = projects.value.length;
     } catch (error) {
       console.error('Error fetching projects:', error);
     }
@@ -61,6 +58,30 @@ export const useMainStore = defineStore('main', () => {
     }
   };
 
+  // Update an existing project in Firestore
+  const updateProject = async (updatedProject: Project) => {
+    try {
+      const projectRef = doc(db, 'projects', updatedProject.id);
+      
+      // Specify the fields to update
+      const updateData = {
+        title: updatedProject.title,
+        description: updatedProject.description,
+        longDescription: updatedProject.longDescription,
+        date: updatedProject.date,
+        images: updatedProject.images
+      };
+
+      await updateDoc(projectRef, updateData); // Update in Firestore
+      const index = projects.value.findIndex((p) => p.id === updatedProject.id);
+      if (index !== -1) {
+        projects.value[index] = { ...updatedProject }; // Update in local state
+      }
+    } catch (error) {
+      console.error('Error updating project:', error);
+    }
+  };
+
   // Remove a project from Firestore
   const removeProject = async (id: string) => {
     try {
@@ -72,16 +93,15 @@ export const useMainStore = defineStore('main', () => {
     }
   };
 
-  // Fetch projects on store initialization
   fetchProjects();
 
-  // Return the state and actions for use in components
   return {
-    userName,
+    userName, // Ensure userName is exported from the store
     projects,
     projectCount,
     fetchProjects,
     addProject,
+    updateProject,
     removeProject,
   };
 });

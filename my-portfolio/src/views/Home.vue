@@ -6,14 +6,24 @@
       <h1 class="text-5xl font-extrabold mb-4">Welcome to My Portfolio</h1>
       <p class="text-xl mb-6">Hi, I'm {{ store.userName }}, a passionate Frontend Developer.</p>
       <div class="flex justify-center space-x-4">
-        <a href="#projects" class="bg-white text-blue-600 font-semibold py-2 px-6 rounded-full shadow-lg hover:bg-gray-100 transition duration-300">
+        <a
+          href="#projects"
+          class="bg-white text-blue-600 font-semibold py-2 px-6 rounded-full shadow-lg hover:bg-gray-100 transition duration-300"
+        >
           View My Work
         </a>
-        <a href="#contact" class="bg-transparent border-2 border-white text-white font-semibold py-2 px-6 rounded-full hover:bg-white hover:text-blue-600 transition duration-300">
+        <a
+          href="#contact"
+          class="bg-transparent border-2 border-white text-white font-semibold py-2 px-6 rounded-full hover:bg-white hover:text-blue-600 transition duration-300"
+        >
           Contact Me
         </a>
         <!-- Logout Button (Visible to Authenticated Users Only) -->
-        <button v-if="isAuthenticated" @click="handleLogout" class="bg-red-600 text-white font-semibold py-2 px-6 rounded-full shadow-md hover:bg-red-700 transition duration-300">
+        <button
+          v-if="isAuthenticated"
+          @click="handleLogout"
+          class="bg-red-600 text-white font-semibold py-2 px-6 rounded-full shadow-md hover:bg-red-700 transition duration-300"
+        >
           Logout
         </button>
       </div>
@@ -47,7 +57,7 @@
               <p class="text-gray-600 mb-4">{{ project.description }}</p>
             </div>
 
-            <!-- Remove Project Button (Separate Clickable Area) -->
+            <!-- Remove Project Button -->
             <button 
               v-if="isAuthenticated" 
               @click.stop="handleRemoveProject(project.id)" 
@@ -55,13 +65,22 @@
             >
               Remove
             </button>
+
+            <!-- Edit Project Button -->
+            <button 
+              v-if="isAuthenticated" 
+              @click.stop="goToEditProject(project.id)" 
+              class="text-blue-600 hover:underline font-semibold absolute top-10 right-2"
+            >
+              Edit
+            </button>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Add Project Form (Only for Authenticated Users) -->
-    <section v-if="isAuthenticated" id="add-project" class="py-16 px-4 bg-gray-50">
+    <!-- Add Project Form -->
+    <section id="add-project" class="py-16 px-4 bg-gray-50">
       <div class="max-w-4xl mx-auto">
         <h2 class="text-4xl font-bold text-center text-gray-800 mb-6">Add a New Project</h2>
         <form @submit.prevent="handleAddProject" class="space-y-4">
@@ -69,8 +88,10 @@
           <textarea v-model="newProjectDescription" placeholder="Project Description" class="w-full p-2 border border-gray-300 rounded"></textarea>
           <textarea v-model="newProjectLongDescription" placeholder="Project Longer Description" class="w-full p-2 border border-gray-300 rounded"></textarea>
           <input type="file" @change="handleFileChange" accept="image/*" multiple class="w-full p-2 border border-gray-300 rounded" />
-          
-          <button type="submit" class="bg-blue-600 text-white py-2 px-6 rounded-full shadow-md hover:bg-blue-700 transition duration-300">
+          <button
+            type="submit"
+            class="bg-blue-600 text-white py-2 px-6 rounded-full shadow-md hover:bg-blue-700 transition duration-300"
+          >
             Add Project
           </button>
         </form>
@@ -83,107 +104,112 @@
 import { defineComponent, ref, onMounted } from 'vue';
 import { useMainStore } from '@/store/mainStore';
 import { checkUserAuth, signOutUser } from '@/services/auth';
-import { storage } from '@/firebaseConfig';
-import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { useRouter } from 'vue-router'; // Import router
+import { useRouter } from 'vue-router';
+import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage'; 
+import { storage } from '@/firebaseConfig'; // Correctly import the storage instance
 
 export default defineComponent({
   name: 'Home',
   setup() {
     const store = useMainStore();
-    const router = useRouter(); // Initialize router
+    const router = useRouter();
     
-    // Local state for the form
-    const newProjectTitle = ref('');
-    const newProjectDescription = ref('');
-    const newProjectLongDescription = ref(''); // New state for longer description
-    const newProjectImages = ref<File[]>([]); // Array of files for multiple images
-    const isAuthenticated = ref(false); // State to track if the user is authenticated
+    const isAuthenticated = ref(false);
 
-    // Function to handle file input changes
-    const handleFileChange = (event: Event) => {
-      const target = event.target as HTMLInputElement;
-      if (target.files) {
-        newProjectImages.value = Array.from(target.files); // Convert FileList to Array
-      }
-    };
-
-    // Function to handle form submission
-    const handleAddProject = async () => {
-      if (newProjectTitle.value && newProjectDescription.value && newProjectImages.value.length > 0) {
-        const imageUrls = await Promise.all(newProjectImages.value.map(uploadImageToStorage)); // Upload images and get URLs
-
-        store.addProject({
-          title: newProjectTitle.value,
-          description: newProjectDescription.value,
-          longDescription: newProjectLongDescription.value, // Include longer description
-          date: new Date().toISOString(), // Add a date in ISO format
-          images: imageUrls, // Array of image URLs
-        });
-        
-        // Clear input fields after adding
-        newProjectTitle.value = '';
-        newProjectDescription.value = '';
-        newProjectLongDescription.value = ''; // Clear the longer description input
-        newProjectImages.value = [];
-      }
-    };
-
-    // Function to upload an image to Firebase Storage
-    const uploadImageToStorage = async (file: File): Promise<string> => {
-      const storageReference = storageRef(storage, `images/${Date.now()}-${file.name}`); // Unique filename using timestamp
-      await uploadBytes(storageReference, file); // Upload the file
-      const downloadURL = await getDownloadURL(storageReference); // Get the URL of the uploaded file
-      return downloadURL;
-    };
-
-    // Function to handle user logout
+    // Handle user logout
     const handleLogout = async () => {
       try {
         await signOutUser();
-        isAuthenticated.value = false; // Reset the authentication state
-        window.location.href = '/login'; // Redirect to the login page
+        isAuthenticated.value = false;
+        window.location.href = '/login';
       } catch (error) {
         console.error('Error logging out:', error);
       }
     };
 
-    // Function to remove a project
+    // Remove a project
     const handleRemoveProject = async (id: string) => {
       try {
-        await store.removeProject(id); // Call the store's removeProject method
+        await store.removeProject(id);
       } catch (error) {
         console.error('Error removing project:', error);
       }
     };
 
-    // Function to navigate to project detail
+    // Navigate to project detail page
     const goToProjectDetail = (id: string) => {
       router.push({ name: 'ProjectDetail', params: { id } });
     };
 
-    // Check if the user is authenticated
+    // Navigate to edit project page
+    const goToEditProject = (id: string) => {
+      router.push({ name: 'EditProject', params: { id } });
+    };
+
+    // Form data
+    const newProjectTitle = ref('');
+    const newProjectDescription = ref('');
+    const newProjectLongDescription = ref('');
+    const newProjectImages = ref<File[]>([]);
+
+    // Handle adding a new project
+    const handleAddProject = async () => {
+      if (newProjectTitle.value && newProjectDescription.value && newProjectLongDescription.value) {
+        const imageUrls = await Promise.all(newProjectImages.value.map(uploadImageToStorage));
+        store.addProject({
+          title: newProjectTitle.value,
+          description: newProjectDescription.value,
+          longDescription: newProjectLongDescription.value,
+          date: new Date().toISOString(),
+          images: imageUrls,
+        });
+
+        // Clear form fields after adding
+        newProjectTitle.value = '';
+        newProjectDescription.value = '';
+        newProjectLongDescription.value = '';
+        newProjectImages.value = [];
+      }
+    };
+
+    // Handle file input changes
+    const handleFileChange = (event: Event) => {
+      const target = event.target as HTMLInputElement;
+      if (target.files) {
+        newProjectImages.value = Array.from(target.files);
+      }
+    };
+
+    // Upload image to Firebase Storage
+    const uploadImageToStorage = async (file: File): Promise<string> => {
+      const storageReference = storageRef(storage, `images/${Date.now()}-${file.name}`);
+      await uploadBytes(storageReference, file);
+      const downloadURL = await getDownloadURL(storageReference);
+      return downloadURL;
+    };
+
+    // Check authentication on mount
     onMounted(() => {
       checkUserAuth((user) => {
         if (user) {
-          isAuthenticated.value = true; // Set authenticated state to true
+          isAuthenticated.value = true;
         }
-        store.fetchProjects(); // Fetch projects regardless of authentication
+        store.fetchProjects();
       });
     });
 
     return {
       store,
+      handleRemoveProject,
+      handleLogout,
+      goToProjectDetail,
+      goToEditProject,
+      isAuthenticated,
       newProjectTitle,
       newProjectDescription,
-      newProjectLongDescription, // Return the new state
-      newProjectImages,
+      newProjectLongDescription,
       handleAddProject,
-      handleRemoveProject, // Expose remove project function
-      handleLogout,
       handleFileChange,
-      goToProjectDetail, // Return the navigation function
-      isAuthenticated,
     };
   },
 });
@@ -191,12 +217,4 @@ export default defineComponent({
 
 <style scoped>
 /* Additional styles can go here */
-.project-card {
-  position: relative;
-}
-.remove-button {
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-}
 </style>
