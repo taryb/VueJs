@@ -6,8 +6,8 @@
       <div class="container flex flex-wrap justify-between items-center mx-auto">
         <!-- Logo -->
         <a href="/" class="flex items-center">
-          <img src="https://via.placeholder.com/40" class="mr-3 h-8" alt="Logo" />
-          <span class="self-center text-2xl font-semibold whitespace-nowrap text-gray-800">My Portfolio</span>
+          <img src="/favicon.ico" class="mr-3 h-8" alt="Logo" />
+          <span class="self-center text-2xl font-semibold whitespace-nowrap text-gray-800">Tary B's Portfolio</span>
         </a>
         
         <!-- Mobile Menu Button -->
