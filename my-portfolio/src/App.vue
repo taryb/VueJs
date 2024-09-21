@@ -1,19 +1,19 @@
 <template>
   <div id="app">
     <!-- Navbar -->
-    <nav class="bg-white border-b border-gray-200 px-4 py-2.5 fixed w-full z-20 top-0 left-0">
+    <nav class="bg-teal-500 border-b border-gray-300 px-4 py-2.5 fixed w-full z-20 top-0 left-0">
       <div class="container flex flex-wrap justify-between items-center mx-auto">
         <!-- Logo -->
         <a href="/" class="flex items-center">
           <img src="/favicon.ico" class="mr-3 h-8" alt="Logo" />
-          <span class="self-center text-2xl font-semibold whitespace-nowrap text-gray-800">Tary B's Portfolio</span>
+          <span class="self-center text-2xl font-semibold whitespace-nowrap text-white">Tary B's Portfolio</span>
         </a>
         
         <!-- Mobile Menu Button -->
         <button
           @click="toggleMobileMenu"
           type="button"
-          class="inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
+          class="inline-flex items-center p-2 ml-3 text-sm text-white rounded-lg md:hidden hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-gray-200"
           aria-controls="navbar"
           aria-expanded="false"
         >
@@ -37,19 +37,19 @@
         <div :class="{'hidden': !isMobileMenuOpen}" class="w-full md:flex md:w-auto md:items-center" id="navbar">
           <ul class="flex flex-col md:flex-row md:space-x-8 mt-4 md:mt-0 md:text-sm md:font-medium">
             <li>
-              <router-link @click="closeMobileMenu" to="/" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-teal-600">Home</router-link>
+              <router-link @click="closeMobileMenu" to="/" class="block py-2 pr-4 pl-3 text-white hover:text-teal-400">Home</router-link>
             </li>
             <li>
-              <router-link @click="closeMobileMenu" to="/about" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-teal-600">About</router-link>
+              <router-link @click="closeMobileMenu" to="/about" class="block py-2 pr-4 pl-3 text-white hover:text-teal-400">About</router-link>
             </li>
             <li>
-              <router-link @click="closeMobileMenu" to="/projects" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-teal-600">Projects</router-link>
+              <router-link @click="closeMobileMenu" to="/projects" class="block py-2 pr-4 pl-3 text-white hover:text-teal-400">Projects</router-link>
             </li>
             <li>
-              <router-link @click="closeMobileMenu" to="/contact" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-teal-600">Contact</router-link>
+              <router-link @click="closeMobileMenu" to="/contact" class="block py-2 pr-4 pl-3 text-white hover:text-teal-400">Contact</router-link>
             </li>
             <li>
-              <router-link @click="closeMobileMenu" to="/login" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-teal-600">Login</router-link>
+              <router-link @click="closeMobileMenu" to="/login" class="block py-2 pr-4 pl-3 text-white hover:text-teal-400">Login</router-link>
             </li>
           </ul>
         </div>
@@ -92,6 +92,6 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style scoped>
 /* Custom styles for the navigation bar */
 </style>

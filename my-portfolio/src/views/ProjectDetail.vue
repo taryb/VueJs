@@ -1,8 +1,8 @@
 <template>
-  <div class="project-detail bg-gray-50 min-h-screen py-10">
+  <div class="project-detail bg-gray-900 min-h-screen py-10">
     <div class="max-w-4xl mx-auto">
       <!-- Project Title and Date -->
-      <h2 v-if="project" class="text-4xl font-bold text-center text-gray-800 mb-6">{{ project.title }}</h2>
+      <h2 v-if="project" class="text-4xl font-bold text-center text-teal-400 mb-6">{{ project.title }}</h2>
       <p v-if="project" class="text-center text-gray-500 mb-2">Date: {{ formattedDate }}</p>
 
       <!-- Image Gallery (Carousel) -->
@@ -24,11 +24,11 @@
             </div>
           </div>
           <!-- Left Arrow -->
-          <button @click="prevImage" class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full shadow-lg">
+          <button @click="prevImage" class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-700 hover:bg-teal-500 text-white p-3 rounded-full shadow-lg transition-all duration-300">
             &#9664;
           </button>
           <!-- Right Arrow -->
-          <button @click="nextImage" class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full shadow-lg">
+          <button @click="nextImage" class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-700 hover:bg-teal-500 text-white p-3 rounded-full shadow-lg transition-all duration-300">
             &#9654;
           </button>
         </div>
@@ -39,16 +39,16 @@
             :key="index"
             @click="setCurrentImage(index)"
             :class="{
-              'bg-gray-800': currentImageIndex === index,
+              'bg-teal-500': currentImageIndex === index,
               'bg-gray-400': currentImageIndex !== index,
             }"
-            class="w-3 h-3 mx-1 rounded-full cursor-pointer"
+            class="w-3 h-3 mx-1 rounded-full cursor-pointer transition-all duration-300"
           ></span>
         </div>
       </div>
 
       <!-- Longer Description -->
-      <div v-if="project" class="mb-8 text-lg text-gray-700 leading-relaxed">
+      <div v-if="project" class="mb-8 text-lg text-gray-300 leading-relaxed">
         {{ project.longDescription }}
       </div>
 
@@ -86,12 +86,11 @@ export default defineComponent({
 
     const projectId = route.params.id as string;
 
-    // Fetch the project by ID and log images
+    // Fetch the project by ID
     onMounted(() => {
       const foundProject = store.projects.find((p) => p.id === projectId);
       if (foundProject) {
         project.value = foundProject as Project;
-        console.log(project.value.images); // Verify images are loaded
       }
     });
 
@@ -145,31 +144,28 @@ export default defineComponent({
 </script>
 
 <style scoped>
-/* Styles for modal, carousel, zoom effect, and arrows */
+/* Custom styles for the project detail page */
 .project-detail img {
   cursor: pointer;
   transition: opacity 0.2s ease-in-out, transform 0.5s ease;
 }
 
 .project-detail img:hover {
-  opacity: 0.8;
+  opacity: 0.9;
 }
 
-.project-detail .carousel img:hover {
-  transform: scale(1.05); /* Slight zoom on hover */
+.carousel button {
+  transition: all 0.3s ease;
 }
 
-.project-detail .carousel img {
-  object-fit: contain;
-  max-width: 100%; /* Ensures the image doesn't exceed its container width */
-  max-height: 100%; /* Ensures the image doesn't exceed its container height */
-  transition: transform 0.5s ease-in-out;
+.carousel button:hover {
+  background-color: #14b8a6; /* Teal accent on hover */
 }
 
 .modal img {
   object-fit: contain;
-  max-width: 90vw; /* Ensures modal image fits within the viewport */
-  max-height: 90vh; /* Ensures modal image fits within the viewport */
+  max-width: 90vw;
+  max-height: 90vh;
 }
 
 .modal {
