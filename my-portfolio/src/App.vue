@@ -1,7 +1,6 @@
-<!-- src/App.vue -->
 <template>
   <div id="app">
-    <!-- Navbar: Move it here to make it available globally -->
+    <!-- Navbar -->
     <nav class="bg-white border-b border-gray-200 px-4 py-2.5 fixed w-full z-20 top-0 left-0">
       <div class="container flex flex-wrap justify-between items-center mx-auto">
         <!-- Logo -->
@@ -38,19 +37,19 @@
         <div :class="{'hidden': !isMobileMenuOpen}" class="w-full md:flex md:w-auto md:items-center" id="navbar">
           <ul class="flex flex-col md:flex-row md:space-x-8 mt-4 md:mt-0 md:text-sm md:font-medium">
             <li>
-              <router-link to="/" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-blue-700">Home</router-link>
+              <router-link @click="closeMobileMenu" to="/" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-teal-600">Home</router-link>
             </li>
             <li>
-              <router-link to="/about" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-blue-700">About</router-link>
+              <router-link @click="closeMobileMenu" to="/about" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-teal-600">About</router-link>
             </li>
             <li>
-              <router-link to="/projects" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-blue-700">Projects</router-link>
+              <router-link @click="closeMobileMenu" to="/projects" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-teal-600">Projects</router-link>
             </li>
             <li>
-              <router-link to="/contact" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-blue-700">Contact</router-link>
+              <router-link @click="closeMobileMenu" to="/contact" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-teal-600">Contact</router-link>
             </li>
             <li>
-              <router-link to="/login" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-blue-700">Login</router-link>
+              <router-link @click="closeMobileMenu" to="/login" class="block py-2 pr-4 pl-3 text-gray-700 hover:text-teal-600">Login</router-link>
             </li>
           </ul>
         </div>
@@ -77,9 +76,17 @@ export default defineComponent({
       isMobileMenuOpen.value = !isMobileMenuOpen.value;
     };
 
+    // Function to close the mobile menu when a link is clicked
+    const closeMobileMenu = () => {
+      if (isMobileMenuOpen.value) {
+        isMobileMenuOpen.value = false;
+      }
+    };
+
     return {
       isMobileMenuOpen,
       toggleMobileMenu,
+      closeMobileMenu,
     };
   },
 });
